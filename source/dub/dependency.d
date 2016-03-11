@@ -644,9 +644,9 @@ struct Version {
 	static @property HEAD() { return Version(MAX_VERS); }
 	deprecated("Use masterBranch instead")
 	static @property MASTER() { return Version(MASTER_STRING); }
-	deprecated("Use unknownVersion instead");
+	deprecated("Use unknownVersion instead")
 	static @property UNKNOWN() { return Version(UNKNOWN_VERS); }
-	deprecated("Use masterBranch.toString() instead");
+	deprecated("Use masterBranch.toString() instead")
 	static @property MASTER_STRING() { return "~master"; }
 	deprecated
 	static @property BRANCH_IDENT() { return '~'; }
