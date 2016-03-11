@@ -495,7 +495,7 @@ class InitCommand : Command {
 					auto ver = dub.getLatestVersion(depname);
 					auto dep = ver.isBranch ? Dependency(ver) : Dependency("~>" ~ ver.toString());
 					p.buildSettings.dependencies[depname] =	dep;
-					logInfo("Added dependency %s %s", depname, dep.versionString);
+					logInfo("Added dependency %s %s", depname, dep.versionSpec);
 				} catch (Exception e) {
 					logError("Could not find package '%s'.", depname);
 					logDebug("Full error: %s", e.toString().sanitize);
@@ -1363,7 +1363,7 @@ class ListCommand : Command {
 	{
 		logInfo("Packages present in the system and known to dub:");
 		foreach (p; dub.packageManager.getPackageIterator())
-			logInfo("  %s %s: %s", p.name, p.ver, p.path.toNativeString());
+			logInfo("  %s %s: %s", p.name, p.version_, p.path.toNativeString());
 		logInfo("");
 		return 0;
 	}
@@ -1674,9 +1674,9 @@ class DustmiteCommand : PackageBuildCommand {
 				if (dep.path.length > 0)
 					dep.path = Path("../") ~ pack;
 			}
-			foreach (name, ref dep; prj.rootPackage.info.buildSettings.dependencies)
+			foreach (name, ref dep; prj.rootPackage.recipe.buildSettings.dependencies)
 				fixPathDependency(name, dep);
-			foreach (ref cfg; prj.rootPackage.info.configurations)
+			foreach (ref cfg; prj.rootPackage.recipe.configurations)
 				foreach (name, ref dep; cfg.buildSettings.dependencies)
 					fixPathDependency(name, dep);
 			prj.rootPackage.storeInfo(path ~ prj.rootPackage.name);
