@@ -99,10 +99,10 @@ class Package {
 
 	this(Json package_info, Path root = Path(), Package parent = null, string versionOverride = "")
 	{
-		import dub.recipe.io;
+		import dub.recipe.json;
 
 		PackageRecipe recipe;
-		parsePackageRecipe(package_info.toString(), "dub.json", parent ? parent.name : null);
+		parseJson(recipe, package_info, parent ? parent.name : null);
 		this(recipe, root, parent, versionOverride);
 	}
 
