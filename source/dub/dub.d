@@ -1079,7 +1079,7 @@ class DependencyVersionResolver : DependencyResolver!(Dependency, Dependency) {
 		}
 		auto basepack = pack.basePackage;
 
-		foreach (dname, dspec; pack.dependencies) {
+		foreach (dname, dspec; pack.recipe.dependencies) {
 			auto dbasename = getBasePackageName(dname);
 
 			// detect dependencies to the root package (or sub packages thereof)

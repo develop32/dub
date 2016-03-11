@@ -135,8 +135,8 @@ class Project {
 
 				auto cfg = configs.get(p.name, null);
 
-				foreach (dn; p.dependencies.byKey.array.sort()) {
-					auto dv = p.dependencies[dn];
+				foreach (dn; p.recipe.dependencies.byKey.array.sort()) {
+					auto dv = p.recipe.dependencies[dn];
 					// filter out dependencies not in the current configuration set
 					if (!p.hasDependency(dn, cfg)) continue;
 					auto dependency = getDependency(dn, true);
@@ -197,7 +197,7 @@ class Project {
 		}
 		enforce(!m_rootPackage.name.canFind(' '), "Aborting due to the package name containing spaces.");
 
-		foreach (dn, ds; m_rootPackage.dependencies)
+		foreach (dn, ds; m_rootPackage.recipe.dependencies)
 			if (ds.isExactVersion && ds.version_.isBranch) {
 				logWarn("WARNING: A deprecated branch based version specification is used "
 					~ "for the dependency %s. Please use numbered versions instead. Also "
@@ -208,7 +208,7 @@ class Project {
 
 		bool[string] visited;
 		void validateDependenciesRec(Package pack) {
-			foreach (name, vspec_; pack.dependencies) {
+			foreach (name, vspec_; pack.recipe.dependencies) {
 				if (name in visited) continue;
 				visited[name] = true;
 
@@ -240,7 +240,7 @@ class Project {
 			logDebug("%sCollecting dependencies for %s", indent, pack.name);
 			indent ~= "  ";
 
-			foreach (name, vspec_; pack.dependencies) {
+			foreach (name, vspec_; pack.recipe.dependencies) {
 				Dependency vspec = vspec_;
 				Package p;
 
@@ -323,7 +323,7 @@ class Project {
 		string[][string] parents;
 		parents[m_rootPackage.name] = null;
 		foreach (p; getTopologicalPackageList())
-			foreach (d; p.dependencies.byKey)
+			foreach (d; p.recipe.dependencies.byKey)
 				parents[d] ~= p.name;
 
 
@@ -388,7 +388,7 @@ class Project {
 			scope (exit) allconfigs_path.length--;
 
 			// first, add all dependency configurations
-			foreach (dn; p.dependencies.byKey) {
+			foreach (dn; p.recipe.dependencies.byKey) {
 				auto dp = getDependency(dn, true);
 				if (!dp) continue;
 				determineAllConfigs(dp);
@@ -397,7 +397,7 @@ class Project {
 			// for each configuration, determine the configurations usable for the dependencies
 			outer: foreach (c; p.getPlatformConfigurations(platform, p is m_rootPackage && allow_non_library)) {
 				string[][string] depconfigs;
-				foreach (dn; p.dependencies.byKey) {
+				foreach (dn; p.recipe.dependencies.byKey) {
 					auto dp = getDependency(dn, true);
 					if (!dp) continue;
 
@@ -418,7 +418,7 @@ class Project {
 
 				// add this configuration to the graph
 				size_t cidx = createConfig(p.name, c);
-				foreach (dn; p.dependencies.byKey)
+				foreach (dn; p.recipe.dependencies.byKey)
 					foreach (sc; depconfigs.get(dn, null))
 						createEdge(cidx, createConfig(dn, sc));
 			}

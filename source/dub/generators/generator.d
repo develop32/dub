@@ -186,8 +186,8 @@ class ProjectGenerator
 		if (is_target)
 			targets[pack.name] = TargetInfo(pack, [pack], configs[pack.name], buildsettings, null);
 
-		foreach (depname; pack.dependencies.byKey.array.sort()) {
-			auto depspec = pack.dependencies[depname];
+		foreach (depname; pack.recipe.dependencies.byKey.array.sort()) {
+			auto depspec = pack.recipe.dependencies[depname];
 			if (!pack.hasDependency(depname, configs[pack.name])) continue;
 			auto dep = m_project.getDependency(depname, depspec.optional);
 			if (!dep) continue;
