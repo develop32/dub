@@ -187,7 +187,7 @@ class Package {
 
 		Note that this is a shortcut to `this.recipe.version_`.
 	*/
-	@property Version version_() const { return Version(m_info.version_); }
+	@property Version version_() const { return m_parentPackage ? m_parentPackage.version_ : Version(m_info.version_); }
 	/// ditto
 	@property void version_(Version value) { assert(m_parentPackage is null); m_info.version_ = value.toString(); }
 
