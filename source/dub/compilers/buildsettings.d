@@ -19,7 +19,7 @@ static if (__VERSION__ >= 2067)
 /// BuildPlatform specific settings, like needed libraries or additional
 /// include paths.
 struct BuildSettings {
-	import dub.internal.vibecompat.data.serialization;
+	import dub.internal.vibecompat.data.serialization : byName;
 
 	TargetType targetType;
 	string targetPath;
@@ -302,7 +302,7 @@ enum BuildOption {
 			@ignore BitFlags!BuildOption values;
 			this(BuildOption opt) { values = opt; }
 			this(BitFlags!BuildOption v) { values = v; }
-			deprecated("Use BuildOption.* instead.") {
+			deprecated("Use BuildOption.* instead. Will be removed for version 1.0.0.") {
 				enum none = BuildOption.none;
 				enum debugMode = BuildOption.debugMode;
 				enum releaseMode = BuildOption.releaseMode;

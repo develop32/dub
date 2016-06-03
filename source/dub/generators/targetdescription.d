@@ -9,6 +9,7 @@ module dub.generators.targetdescription;
 
 import dub.compilers.buildsettings;
 import dub.compilers.compiler;
+import dub.compilers.utils : getTargetFileName;
 import dub.description;
 import dub.generators.generator;
 import dub.internal.vibecompat.inet.path;
@@ -25,6 +26,9 @@ class TargetDescriptionGenerator : ProjectGenerator {
 
 	protected override void generateTargets(GeneratorSettings settings, in TargetInfo[string] targets)
 	{
+		import std.algorithm : map;
+		import std.array : array;
+
 		auto configs = m_project.getPackageConfigs(settings.platform, settings.config);
 		targetDescriptions.length = targets.length;
 		size_t i = 0;
